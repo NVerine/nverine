@@ -1,0 +1,46 @@
+version: '3'
+
+services:
+    mysql:
+        image: mysql:5.7
+        container_name: mysql57
+        ports:
+            - "3307:3306"
+        volumes:
+            - mysql:/var/lib/mysql/
+        environment:
+            MYSQL_DATABASE: 'nverine'
+            MYSQL_USER: 'root'
+            MYSQL_ROOT_PASSWORD: '12345'
+        networks:
+            - symfony
+    php:
+        build:
+            context: .
+            dockerfile: docker/php/Dockerfile
+            args:
+                TIMEZONE: "America/Sao_Paulo"
+                DB_HOST: "mysql"
+                DB_USER: "root"
+                DB_PASS: "12345"
+                DB_NAME: "nverine"
+        volumes:
+            - ./symfony/:/var/www/symfony/
+        networks:
+            - symfony
+    nginx:
+        build:
+            context: .
+            dockerfile: docker/nginx/Dockerfile
+        volumes:
+            - ./symfony/:/var/www/symfony/
+        ports:
+            - 8080:80
+        networks:
+            - symfony
+
+volumes:
+    mysql:
+
+networks:
+    symfony:
