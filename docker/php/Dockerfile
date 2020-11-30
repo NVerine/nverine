@@ -1,4 +1,4 @@
-FROM php:7.4-fpm
+FROM amd64/php:7.4-fpm
 ARG TIMEZONE
 ARG DB_HOST
 ARG DB_USER
