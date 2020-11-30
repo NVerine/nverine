@@ -1,4 +1,4 @@
-FROM php:7.4-fpm-buster
+FROM php:7.4-fpm
 ARG TIMEZONE
 ARG DB_HOST
 ARG DB_USER
