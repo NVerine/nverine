@@ -24,11 +24,10 @@ services:
                 DB_USER: "${DB_USER}"
                 DB_PASS: "${DB_PASS}"
                 DB_NAME: "${DB_NAME}"
+                APP: "symfony"
+                REP: "https://github.com/NVerine/symfony.git"
         volumes:
             - ./symfony/:/var/www/symfony/
-        environment:
-            - APP=symfony
-            - REP=https://github.com/NVerine/symfony.git
         networks:
             - symfony
     nginx:
