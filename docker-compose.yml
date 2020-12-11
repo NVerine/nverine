@@ -1,19 +1,32 @@
-version: '3'
+version: '3.5'
 
 services:
-    # mysql:
-    #     image: mysql:5.7
-    #     container_name: mysql57
-    #     ports:
-    #         - "3307:3306"
-    #     volumes:
-    #         - mysql:/var/lib/mysql/
-    #     environment:
-    #         MYSQL_DATABASE: '${DB_NAME}'
-    #         MYSQL_USER: '${DB_USER}'
-    #         MYSQL_ROOT_PASSWORD: '${DB_PASS}'
-    #     networks:
-    #         - symfony
+#    mysql:
+#        image: mysql:5.7
+#        container_name: nverine_mysql57
+#        ports:
+#            - "3306:3306"
+#        volumes:
+#            - mysql:/var/lib/mysql/
+#        environment:
+#            MYSQL_DATABASE: '${DB_NAME}'
+#            MYSQL_USER: '${DB_USER}'
+#            MYSQL_ROOT_PASSWORD: '${DB_PASS}'
+#        networks:
+#            - symfony
+#
+#    phpmyadmin:
+#        container_name: nverine_phpmyadmin
+#        image: phpmyadmin/phpmyadmin:latest
+#        ports:
+#            - 8081:80
+#        environment:
+#            - PMA_ARBITRARY=1
+#        depends_on:
+#            - mysql
+#        networks:
+#            - symfony
+
     php:
         build:
             context: .
@@ -30,6 +43,9 @@ services:
             - ./symfony/:/var/www/symfony/
         networks:
             - symfony
+#        depends_on:
+#            - mysql
+
     nginx:
         build:
             context: .
@@ -40,6 +56,8 @@ services:
             - 8080:80
         networks:
             - symfony
+        depends_on:
+            -   php
 
 volumes:
     mysql:
