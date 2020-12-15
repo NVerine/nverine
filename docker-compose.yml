@@ -31,14 +31,14 @@ services:
         build:
             context: .
             dockerfile: docker/php/Dockerfile
-            args:
-                TIMEZONE: "${TIMEZONE}"
-                DB_HOST: "${DB_HOST}"
-                DB_USER: "${DB_USER}"
-                DB_PASS: "${DB_PASS}"
-                DB_NAME: "${DB_NAME}"
-                APP: "symfony"
-                REP: "https://github.com/NVerine/symfony.git"
+        environment:
+            TIMEZONE: "${TIMEZONE}"
+            DB_HOST: "${DB_HOST}"
+            DB_USER: "${DB_USER}"
+            DB_PASS: "${DB_PASS}"
+            DB_NAME: "${DB_NAME}"
+            APP: "symfony"
+            REP: "https://github.com/NVerine/symfony.git"
         volumes:
             - ./symfony/:/var/www/symfony/
         networks:
