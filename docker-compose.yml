@@ -39,6 +39,7 @@ services:
                 DB_NAME: "${DB_NAME}"
                 APP: "symfony"
                 REP: "https://github.com/NVerine/symfony.git"
+                ENVIRONMENT: "${ENVIRONMENT}"
         volumes:
             - ./symfony/:/var/www/symfony/
         networks:

@@ -15,11 +15,18 @@ fi
 
 echo "------> Criando .env"
 echo "DATABASE_URL='mysql://$DB_USER:$DB_PASS@$DB_HOST:3306/$DB_NAME'" > /var/www/${APP}/.env
+echo "APP_ENV=$ENVIRONMENT" >> /var/www/${APP}/.env
 
 echo "------> Composer install $APP"
 cd /var/www/${APP}
-composer install --no-suggest --quiet
-chmod a+rw -R /var/www/${APP}
+
+if [ "$ENVIRONMENT" = "prod" ]
+then
+	composer install --no-dev --optimize-autoloader
+else
+	composer install --no-suggest --quiet
+fi
+	chmod a+rw -R /var/www/${APP}
 
 echo "============> Instalação concluída $APP"
 
