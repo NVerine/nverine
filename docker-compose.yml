@@ -43,8 +43,6 @@ services:
             - ./symfony/:/var/www/symfony/
         networks:
             - symfony
-#        depends_on:
-#            - mysql
 
     nginx:
         build:

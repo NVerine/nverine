@@ -4,14 +4,15 @@ echo "============> Iniciando instalação $APP"
 
 declare -A REP
 
-echo "------> Criando .env"
-echo "DATABASE_URL='mysql://$DB_USER:$DB_PASS@$DB_HOST:3306/$DB_NAME'" > /var/www/${APP}/.env
-
 if [ "$(ls -A /var/www/$APP)" ]; then
     # Sistema já existe
+    echo "------> Atualizando .env"
+    echo "DATABASE_URL='mysql://$DB_USER:$DB_PASS@$DB_HOST:3306/$DB_NAME'" > /var/www/${APP}/.env
     echo "------> Sistema pronto $APP"
 else
     # Sistema não existe
+    echo "------> Criando .env"
+    echo "DATABASE_URL='mysql://$DB_USER:$DB_PASS@$DB_HOST:3306/$DB_NAME'" > /var/www/${APP}/.env
     echo "------> Clonando $APP -> $REP"
 
     git clone ${REP} /var/www/${APP}
