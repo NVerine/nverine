@@ -22,6 +22,7 @@ cd /var/www/${APP}
 
 if [ "$ENVIRONMENT" = "prod" ]
 then
+  echo "------> ENV $ENVIRONMENT"
 	composer install --no-dev --optimize-autoloader
 else
 	composer install --no-suggest --quiet
