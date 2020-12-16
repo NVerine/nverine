@@ -31,14 +31,14 @@ services:
         build:
             context: .
             dockerfile: docker/php/Dockerfile
-        environment:
-            TIMEZONE: "${TIMEZONE}"
-            DB_HOST: "${DB_HOST}"
-            DB_USER: "${DB_USER}"
-            DB_PASS: "${DB_PASS}"
-            DB_NAME: "${DB_NAME}"
-            APP: "symfony"
-            REP: "https://github.com/NVerine/symfony.git"
+            args:
+                TIMEZONE: "America/Sao_Paulo"
+                DB_HOST: "${DB_HOST}"
+                DB_USER: "${DB_USER}"
+                DB_PASS: "${DB_PASS}"
+                DB_NAME: "${DB_NAME}"
+                APP: "symfony"
+                REP: "https://github.com/NVerine/symfony.git"
         volumes:
             - ./symfony/:/var/www/symfony/
         networks:
@@ -55,7 +55,7 @@ services:
         networks:
             - symfony
         depends_on:
-            -   php
+            - php
 
 volumes:
     mysql:
