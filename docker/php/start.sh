@@ -25,7 +25,17 @@ then
   echo "------> ENV $ENVIRONMENT"
 	composer install --no-dev --optimize-autoloader
 else
+  echo "-------> instalando xdebug"
+  echo '' | pecl install xdebug
 	composer install --no-suggest --quiet
+	bin/phpunit --version
+
+	if [ ! "$(ls -A /var/www/vue)" ]
+	 then
+	    echo "------> Clonando interface"
+      git clone https://github.com/NVerine/vue.git /var/www/vue
+      chmod a+rw -R /var/www/vue
+	fi
 fi
 	chmod a+rw -R /var/www/${APP}
 
