@@ -40,6 +40,7 @@ services:
                 APP: "symfony"
                 REP: "https://github.com/NVerine/symfony.git"
                 ENVIRONMENT: "${ENVIRONMENT}"
+                AZURE_STORAGE_CONNECTION_STRING: "${STORAGE}"
         volumes:
             - ./symfony/:/var/www/symfony/
         networks:
