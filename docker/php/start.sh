@@ -25,10 +25,10 @@ then
   echo "------> ENV $ENVIRONMENT"
 	composer install --no-dev --optimize-autoloader
 else
-  echo "-------> instalando xdebug"
-  echo '' | pecl install xdebug
-	composer install --no-suggest --quiet
-	bin/phpunit --version
+#  echo "-------> instalando xdebug"
+#  echo '' | pecl install xdebug
+#	composer install --no-suggest --quiet
+#	bin/phpunit --version
 
 	if [ ! "$(ls -A /var/www/vue)" ]
 	 then
