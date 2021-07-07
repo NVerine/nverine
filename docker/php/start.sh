@@ -16,6 +16,7 @@ fi
 echo "------> Criando .env"
 echo "DATABASE_URL='mysql://$DB_USER:$DB_PASS@$DB_HOST:3306/$DB_NAME'" > /var/www/${APP}/.env
 echo "APP_ENV=$ENVIRONMENT" >> /var/www/${APP}/.env
+echo "KERNEL_CLASS='App\Kernel'" >> /var/www/${APP}/.env
 
 echo "------> Composer install $APP"
 cd /var/www/${APP}
@@ -25,10 +26,10 @@ then
   echo "------> ENV $ENVIRONMENT"
 	composer install --no-dev --optimize-autoloader
 else
-#  echo "-------> instalando xdebug"
-#  echo '' | pecl install xdebug
-#	composer install --no-suggest --quiet
-#	bin/phpunit --version
+  echo "-------> instalando xdebug"
+  echo '' | pecl install xdebug
+	composer install --no-suggest --quiet
+	bin/phpunit --version
 
 	if [ ! "$(ls -A /var/www/vue)" ]
 	 then
