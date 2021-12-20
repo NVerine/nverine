@@ -1,21 +1,4 @@
 FROM php:7.4-fpm
-ARG TIMEZONE
-ARG DB_HOST
-ARG DB_USER
-ARG DB_PASS
-ARG DB_NAME
-ARG APP
-ARG REP
-ARG ENVIRONMENT
-ARG AZURE_STORAGE_CONNECTION_STRING
-ENV DB_HOST $DB_HOST
-ENV DB_USER $DB_USER
-ENV DB_PASS $DB_PASS
-ENV DB_NAME $DB_NAME
-ENV APP $APP
-ENV REP $REP
-ENV ENVIRONMENT $ENVIRONMENT
-ENV AZURE_STORAGE_CONNECTION_STRING $AZURE_STORAGE_CONNECTION_STRING
 
 COPY docker/php/php.ini /usr/local/etc/php/conf.d/docker-php-config.ini
 
@@ -55,5 +38,8 @@ RUN echo 'catch_workers_output = yes \n\
             php_admin_flag[log_errors] = on \n\
             php_admin_value[error_reporting] = E_ALL & ~E_NOTICE & ~E_WARNING & ~E_STRICT & ~E_DEPRECATED \n\
             php_admin_value[display_startup_errors] = on' >> /usr/local/etc/php-fpm.d/www.conf
+
+RUN pecl install xdebug \
+    && docker-php-ext-enable xdebug
 
 CMD ["start"]

@@ -1,68 +1,119 @@
+# this file use space ident, pay attention to make any changes!
 version: '3.5'
 
 services:
-#    mysql:
-#        image: mysql:5.7
-#        container_name: nverine_mysql57
-#        ports:
-#            - "3306:3306"
-#        volumes:
-#            - mysql:/var/lib/mysql/
-#        environment:
-#            MYSQL_DATABASE: '${DB_NAME}'
-#            MYSQL_USER: '${DB_USER}'
-#            MYSQL_ROOT_PASSWORD: '${DB_PASS}'
-#        networks:
-#            - symfony
+  # remove comments to run the interface in docker OR download de git repo
+#  vue:
+#    build:
+#      context: .
+#      dockerfile: docker/vue/Dockerfile
+#    ports:
+#      - 80:80
+#    volumes:
+#      - ./vue/:/app/vue
+
+  # remove comments to run the database in docker
+
 #
-#    phpmyadmin:
-#        container_name: nverine_phpmyadmin
-#        image: phpmyadmin/phpmyadmin:latest
-#        ports:
-#            - 8081:80
-#        environment:
-#            - PMA_ARBITRARY=1
-#        depends_on:
-#            - mysql
-#        networks:
-#            - symfony
+#  # remove comments to enable database edition with phpmyadmin in docker
+  mysql:
+    image: mysql:5.7
+    container_name: nverine_mysql57
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql:/var/lib/mysql/
+    env_file:
+      - .env
+    environment:
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+      MYSQL_ROOT_PASSWORD: ${DB_PASS}
+    networks:
+      - symfony
 
-    php:
-        build:
-            context: .
-            dockerfile: docker/php/Dockerfile
-            args:
-                TIMEZONE: "America/Sao_Paulo"
-                DB_HOST: "${DB_HOST}"
-                DB_USER: "${DB_USER}"
-                DB_PASS: "${DB_PASS}"
-                DB_NAME: "${DB_NAME}"
-                APP: "symfony"
-                REP: "https://github.com/NVerine/symfony.git"
-                ENVIRONMENT: "${ENVIRONMENT}"
-                AZURE_STORAGE_CONNECTION_STRING: "${STORAGE}"
-        volumes:
-            - ./symfony/:/var/www/symfony/
-        networks:
-            - symfony
-#        depends_on:
-#            - mysql
+  phpmyadmin:
+    container_name: nverine_phpmyadmin
+    image: phpmyadmin/phpmyadmin:latest
+    ports:
+      - 8081:80
+    environment:
+      - PMA_ARBITRARY=1
+    depends_on:
+      - mysql
+    networks:
+      - symfony
 
-    nginx:
-        build:
-            context: .
-            dockerfile: docker/nginx/Dockerfile
-        volumes:
-            - ./symfony/:/var/www/symfony/
-        ports:
-            - 8080:80
-        networks:
-            - symfony
-        depends_on:
-            - php
+  php:
+    build:
+      context: .
+      dockerfile: docker/php/Dockerfile
+    expose:
+      - 9000
+    env_file:
+      - .env
+    environment:
+      TIMEZONE: "America/Sao_Paulo"
+      APP: "symfony"
+      REP: "https://github.com/NVerine/symfony.git"
+    volumes:
+      - ./symfony/:/var/www/symfony/
+      - ./docker/php/xdebug.ini:/usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
+      - ./docker/php/error_reporting.ini:/usr/local/etc/php/conf.d/error_reporting.ini
+    networks:
+      - symfony
+
+  nginx:
+    build:
+      context: .
+      dockerfile: docker/nginx/Dockerfile
+    volumes:
+      - ./symfony/:/var/www/symfony/
+    ports:
+      - 8080:80
+    networks:
+      - symfony
+    depends_on:
+      - php
+
+#  mariadb:
+#    image: docker.io/bitnami/mariadb:10.5
+#    environment:
+#      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+#      - ALLOW_EMPTY_PASSWORD=yes
+#      - MARIADB_USER=bn_moodle
+#      - MARIADB_DATABASE=bitnami_moodle
+#      - MARIADB_CHARACTER_SET=utf8mb4
+#      - MARIADB_COLLATE=utf8mb4_unicode_ci
+#      - MYSQL_ROOT_PASSWORD=12345
+#      - MYSQL_USER=username
+#      - MYSQL_PASSWORD=12345
+#    volumes:
+#      - mariadb_data:/bitnami/mariadb
+#
+#  moodle:
+#    image: docker.io/bitnami/moodle:3
+#    ports:
+#      - '8090:8080'
+#      - '8443:8443'
+#    environment:
+#      - MOODLE_DATABASE_HOST=mariadb
+#      - MOODLE_DATABASE_PORT_NUMBER=3306
+#      - MOODLE_DATABASE_USER=bn_moodle
+#      - MOODLE_DATABASE_NAME=bitnami_moodle
+#      # ALLOW_EMPTY_PASSWORD is recommended only for development.
+#      - ALLOW_EMPTY_PASSWORD=yes
+#      - MOODLE_USERNAME=admin
+#      - MOODLE_PASSWORD=admin
+#    volumes:
+#      - ./moodle/:/bitnami/
+#    depends_on:
+#      - mariadb
 
 volumes:
-    mysql:
+  mysql:
+  mariadb_data:
 
 networks:
-    symfony:
+  symfony:
